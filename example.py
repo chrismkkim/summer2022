@@ -9,10 +9,10 @@ import pdb
 dir = ['150817', '150818', '150819', '150820', '150821','150825', '150826', '150827', '150828', '150831', '150901']
 postfile = ['post_150817_001_ch2-PnevPanResults-170808-190057.mat', 'post_150818_001_ch2-PnevPanResults-170808-180842.mat', 'post_150819_001_ch2-PnevPanResults-170815-163235.mat', 'post_150820_001_ch2-PnevPanResults-170808-185044.mat', 'post_150821_001-002_ch2-PnevPanResults-170808-184141.mat', 'post_150825_001-002-003_ch2-PnevPanResults-170814-191401.mat', 'post_150826_001_ch2-PnevPanResults-170808-002053.mat', 'post_150827_001_ch2-PnevPanResults-170807-171156.mat', 'post_150828_001-002_ch2-PnevPanResults-170807-204746.mat', 'post_150831_001-002_ch2-PnevPanResults-170807-193348.mat', 'post_150901_001_ch2-PnevPanResults-170807-072732.mat']
 morefile = ['more_150817_001_ch2-PnevPanResults-170808-190057.mat', 'more_150818_001_ch2-PnevPanResults-170808-180842.mat', 'more_150819_001_ch2-PnevPanResults-170815-163235.mat', 'more_150820_001_ch2-PnevPanResults-170808-185044.mat', 'more_150821_001-002_ch2-PnevPanResults-170808-184141.mat', 'more_150825_001-002-003_ch2-PnevPanResults-170814-191401.mat', 'more_150826_001_ch2-PnevPanResults-170808-002053.mat', 'more_150827_001_ch2-PnevPanResults-170807-171156.mat', 'more_150828_001-002_ch2-PnevPanResults-170807-204746.mat', 'more_150831_001-002_ch2-PnevPanResults-170807-193348.mat', 'more_150901_001_ch2-PnevPanResults-170807-072732.mat']
-os.chdir('/home/grabelmz/FN_dataSharing/data/mouse1_fni16/' + dir[9])
+os.chdir('/home/grabelmz/FN_dataSharing/data/mouse1_fni16/' + dir[0])
 os.getcwd()
-post = scipy.io.loadmat(postfile[9])
-more = scipy.io.loadmat(morefile[9])
+post = scipy.io.loadmat(postfile[0])
+more = scipy.io.loadmat(morefile[0])
 
 
 #data.keys()
@@ -112,11 +112,10 @@ def PCA(post, more):
     sns.heatmap(Lad, ax=ax, cmap = "Blues", vmax = 0.1)
     ax.set_xlabel('Time')
     ax.set_ylabel('Neuron')
-    
+   
     plt.savefig('heatmap_Lavg.png')
     
     plt.clf
-    
     ax = plt.axes()
     sns.heatmap(Rad, ax=ax, cmap = "Blues", vmax = 0.1)
     ax.set_xlabel('Time')
@@ -155,23 +154,33 @@ def PCA(post, more):
     comp_inh = pca_inh.components_
 
     plt.figure()
-    plt.plot(time, comp_exc[0,:])
-    plt.plot(time, comp_inh[0,:])
+    plt.plot(time, comp_exc[0,:], label = 'Excitatory')
+    plt.plot(time, comp_inh[0,:], label = 'Inhibitory')
+    plt.legend()
+    plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[0]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[0]))
+
     plt.savefig('pc_excinhL0.png')
     
 
 
     plt.figure()
-    plt.plot(time, comp_exc[1,:])
-    plt.plot(time, comp_inh[1,:])
+    plt.plot(time, comp_exc[1,:], label = 'Excitatory')
+    plt.plot(time, comp_inh[1,:], label = 'Inhibitory')
+    plt.legend()
+    plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[1]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[1]))
+
     plt.savefig('pc_excinhL1.png')
     
 
 
     plt.figure()
-    plt.plot(time, comp_exc[2,:])
-    plt.plot(time, comp_inh[2,:])
+    plt.plot(time, comp_exc[2,:], label = 'Excitatory')
+    plt.plot(time, comp_inh[2,:], label = 'Inhibitory')
+    plt.legend()
+    plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[2]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[2]))
     plt.savefig('pc_excinhL2.png')
+    
+
     
     # R
     pca = PCA()
@@ -200,22 +209,30 @@ def PCA(post, more):
     comp_inh = pca_inh.components_
 
     plt.figure()
-    plt.plot(time, comp_exc[0,:])
-    plt.plot(time, comp_inh[0,:])
+    plt.plot(time, comp_exc[0,:], label = 'Excitatory')
+    plt.plot(time, comp_inh[0,:], label = 'Inhibitory')
+    plt.legend()
+    plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[0]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[0]))
+
     plt.savefig('pc_excinhR0.png')
     
 
 
     plt.figure()
-    plt.plot(time, comp_exc[1,:])
-    plt.plot(time, comp_inh[1,:])
+    plt.plot(time, comp_exc[1,:], label = 'Excitatory')
+    plt.plot(time, comp_inh[1,:], label = 'Inhibitory')
+    plt.legend()
+    plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[1]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[1]))
+
     plt.savefig('pc_excinhR1.png')
     
 
 
     plt.figure()
-    plt.plot(time, comp_exc[2,:])
-    plt.plot(time, comp_inh[2,:])
+    plt.plot(time, comp_exc[2,:], label = 'Excitatory')
+    plt.plot(time, comp_inh[2,:], label = 'Inhibitory')
+    plt.legend()
+    plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[2]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[2]))
     plt.savefig('pc_excinhR2.png')
     
 

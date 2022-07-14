@@ -22,6 +22,7 @@ def dates(date1, date2):
     datadic = {}
     for i in rfolders:
         dir = '/data/grabelmz/FN_dataSharing/data/mouse1_fni16/' + i
+        print(i)
         files = os.listdir(dir)
         post = scipy.io.loadmat(dir + '/' + files[0])
         more = scipy.io.loadmat(dir + '/' + files[1])
@@ -29,7 +30,7 @@ def dates(date1, date2):
         datadic[i] = post
     return datadic, rfolders
 
-datadic, folders = dates(150817, 151029)  # all days fni16 150817-151029
+datadic, folders = dates(150817, 151029)  # all days fni16 150817-151029. all days fni17 150814-151001
 
 def vars(datadic, day): # define variables needed
     outcomes = datadic[day]['outcomes']
@@ -70,9 +71,9 @@ def keepnums(outcomes, traces, allResp): # find which indicies to keep in each d
     R = []
     for i in range(len(keep)): # create new indicies of decisions 0 = L 1 = R
        if allResp[i] == 0:
-           L.append(i)
+           L.append(i) #low freq
        else:
-           R.append(i)
+           R.append(i) #high freq
            
     print('Trials with Data:', len(nums))
     print('Sucessful Trials:', len(keep))
@@ -328,7 +329,7 @@ def combinedPCA(finalL, finalR, finalinhibit, time): #PCA analysis of the combin
     plt.legend()
     plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[0]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[0]))
     plt.xlabel("PCA 1 R")
-    plt.savefig('combinedpcaR1.png')
+    #plt.savefig('combinedpcaR1m2l.png')
      
     plt.figure()
     plt.plot(time, comp_exc[1,:], label = 'Excitatory')
@@ -336,7 +337,7 @@ def combinedPCA(finalL, finalR, finalinhibit, time): #PCA analysis of the combin
     plt.legend()
     plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[1]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[1]))
     plt.xlabel("PCA 2 R")
-    plt.savefig('combinedpcaR2.png')
+    #plt.savefig('combinedpcaR2m2l.png')
         
     plt.figure()
     plt.plot(time, comp_exc[2,:], label = 'Excitatory')
@@ -344,7 +345,7 @@ def combinedPCA(finalL, finalR, finalinhibit, time): #PCA analysis of the combin
     plt.legend()
     plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[2]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[2]))
     plt.xlabel("PCA 3 R")
-    plt.savefig('combinedpcaR3.png')
+    #plt.savefig('combinedpcaR3m2l.png')
         
     # L
     pca = PCA()
@@ -373,7 +374,7 @@ def combinedPCA(finalL, finalR, finalinhibit, time): #PCA analysis of the combin
     plt.legend()
     plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[0]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[0]))
     plt.xlabel("PCA 1 L")
-    plt.savefig('combinedpcaL1.png')
+    #plt.savefig('combinedpcaL1m2l.png')
     
     plt.figure()
     plt.plot(time, comp_exc[1,:], label = 'Excitatory')
@@ -381,7 +382,7 @@ def combinedPCA(finalL, finalR, finalinhibit, time): #PCA analysis of the combin
     plt.legend()
     plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[1]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[1]))
     plt.xlabel("PCA 2 L")
-    plt.savefig('combinedpcaL2.png')
+    #plt.savefig('combinedpcaL2m2l.png')
         
     plt.figure()
     plt.plot(time, comp_exc[2,:], label = 'Excitatory')
@@ -389,9 +390,91 @@ def combinedPCA(finalL, finalR, finalinhibit, time): #PCA analysis of the combin
     plt.legend()
     plt.title('Explained Var Exc: {}'.format(pca_exc.explained_variance_ratio_[2]) + '\nExplained Var Inh: {}'.format(pca_inh.explained_variance_ratio_[2]))
     plt.xlabel("PCA 3 L")    
-    plt.savefig('combinedpcaL3.png')
+    #plt.savefig('combinedpcaL3m2l.png')
     
+
+
+combinedPCA(finalL, finalR, finalinhibit, timec['150917'])
+
+
+def EI(finalL, finalR, finalinhibit):
+    excidx = (finalinhibit == 0)
+    inhidx = (finalinhibit == 1)
+    EL = finalL[:, excidx]
+    IL = finalL[:, inhidx]
+    ER = finalR[:, excidx]
+    IR = finalR[:, inhidx]
+    # ELm = EL.mean(axis=0)
+    # ILm = IL.mean(axis=0)
+    # ERm = ER.mean(axis=0)
+    # IRm = IR.mean(axis=0)
+    return EL, IL, ER, IR
+
+EL, IL, ER, IR = EI(finalL, finalR, finalinhibit)
+EL = pd.DataFrame(EL)
+IL = pd.DataFrame(IL)
+ER = pd.DataFrame(ER)
+IR = pd.DataFrame(IR)
+
+EL.to_csv('target_fni16_exc_left.csv')
+IL.to_csv('target_fni16_inh_left.csv')
+ER.to_csv('target_fni16_exc_right.csv')
+IR.to_csv('target_fni16_inh_right.csv')
+
 
 pdb.set_trace()
 
-combinedPCA(finalL, finalR, finalinhibit, timec['150817'])
+
+print(ELm.mean())
+print(ILm.mean())
+
+ELm_log = np.log10(ELm[~np.isnan(np.log10(ELm))])
+ILm_log = np.log10(ILm[~np.isnan(np.log10(ILm))])
+
+plt.figure()
+plt.hist(ELm_log, bins=200, range=(-20, 0), color='r', histtype='step', density=True)
+plt.hist(ILm_log, bins=200, range=(-20, 0), color='b', histtype='step', density=True)
+plt.tight_layout()
+
+plt.savefig('fig_EI.png')
+
+
+
+
+#identify neurons with activity > 0.1
+#t = np.shape(traces['150917'])[2]
+
+n = np.shape(finalL)[1]
+idxt = {}
+ind = []
+for i in range(n):
+    idxt[i] = np.where(finalL[:,i] > 0.1)
+    if len(idxt[i][0]) != 0:
+        ind.append(i)
+ #{       
+#idxn = {}
+#indnn = {}
+#for j in ind:
+#indn = []
+#for i in range(n):
+#    idxn[i] = np.where(dataL['150917'][:,i] > 0.1)
+#    if len(idxn[i][0]) != 0:
+#        indn.append(i)
+#    indnn[j] = indn
+
+finalL_avg = np.mean(finalL, axis=0)
+finalL_avg_log = np.log10(finalL_avg)
+finalL_avg_log = finalL_avg_log[~np.isnan(finalL_avg_log)]
+
+finalR_avg = np.mean(finalR, axis=0)
+finalR_avg_log = np.log10(finalR_avg)
+finalR_avg_log = finalR_avg_log[~np.isnan(finalR_avg_log)]
+
+plt.figure()
+plt.hist(finalL_avg_log, bins=100, histtype='step')
+plt.hist(finalR_avg_log, bins=100, histtype='step')
+plt.tight_layout()
+plt.savefig('fig_hist1_m1.png')
+
+
+pdb.set_trace()

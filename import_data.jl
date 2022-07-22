@@ -71,75 +71,80 @@ target_16_exc_left_trim = target_16_exc_left[:,nid1][:,nid12]
 # if target_16_exc_left_trim[:,i] contains a negative element, then remove column i
 # check how many i's were removed.
 n1 = 0
+in1 = []
 for i in 1:size(target_16_exc_left_trim)[2]
-    for j in 1:size(target_16_exc_left_trim)[1]
-        if target_16_exc_left_trim[j, i] .< 0
-            global n1
-            n1 = n1 + 1
-            target_16_exc_left_trim[j, i] = 0
-        end
+    if any(target_16_exc_left_trim[:, i] .< 0)
+        global n1
+        global in1
+        n1 = n1 + 1 # count number of negative neruons
+        append!(in1, i) # add index of negative neuron
     end
 end
+
+target_16_exc_left_trim = target_16_exc_left_trim[:, Not(in1)] # remove negative neruons
 
 targetShifted_16_exc_left = target_16_exc_left_trim * 10.0^3.0
 
 target_16_inh_left_trim = target_16_inh_left[:,nid2][:,nid22]
 n2 = 0
+in2 = []
 for i in 1:size(target_16_inh_left_trim)[2]
-    for j in 1:size(target_16_inh_left_trim)[1]
-        if target_16_inh_left_trim[j, i] .< 0
-            global n2
-            n2 = n2 + 1
-            target_16_inh_left_trim[j, i] = 0
-        end
+    if any(target_16_inh_left_trim[:, i] .< 0)
+        global n2
+        global in2
+        n2 = n2 + 1 
+        append!(in2, i)    
     end
 end
 
+target_16_inh_left_trim = target_16_inh_left_trim[:, Not(in2)] # remove negative neruons
 
 targetShifted_16_inh_left = target_16_inh_left_trim * 10.0^3.0
 
 target_16_exc_right_trim = target_16_exc_right[:,nid3][:,nid32]
 n3 = 0
+in3 = []
 for i in 1:size(target_16_exc_right_trim)[2]
-    for j in 1:size(target_16_exc_right_trim)[1]
-        if target_16_exc_right_trim[j, i] .< 0
-            global n3
-            n3 = n3 + 1
-            target_16_exc_right_trim[j, i] = 0
-        end
+    if any(target_16_exc_right_trim[:, i] .< 0)
+        global n3
+        global in3
+        n3 = n3 + 1
+        append!(in3, i)
     end
 end
 
+target_16_exc_right_trim = target_16_exc_right_trim[:, Not(in3)] # remove negative neruons
 
 targetShifted_16_exc_right = target_16_exc_right_trim * 10.0^3.0
 
 target_16_inh_right_trim = target_16_inh_right[:,nid4][:,nid42]
 n4 = 0
+in4 = []
 for i in 1:size(target_16_inh_right_trim)[2]
-    for j in 1:size(target_16_inh_right_trim)[1]
-        if target_16_inh_right_trim[j, i] .< 0
-            global n4
-            n4 = n4 + 1
-            target_16_inh_right_trim[j, i] = 0
-        end
+    if any(target_16_inh_right_trim[:, i] .< 0)
+        global n4
+        global in4
+        n4 = n4 + 1
+        append!(in4, i)
     end
 end
 
+target_16_inh_right_trim = target_16_inh_right_trim[:, Not(in4)] # remove negative neruons
 
 targetShifted_16_inh_right = target_16_inh_right_trim * 10.0^3.0
 
 #----- check the histograms of all four datasets
 #targetShifted_16_exc_left = targetShifted_16_exc_left[.!isinf.(targetShifted_16_exc_left)]
-targetShifted_16_exc_left[targetShifted_16_exc_left .== 0] .= 10^-15
+#targetShifted_16_exc_left[targetShifted_16_exc_left .== 0] .= 10^-15
 
 #targetShifted_16_inh_left = targetShifted_16_inh_left[.!isinf.(targetShifted_16_inh_left)]
-targetShifted_16_inh_left[targetShifted_16_inh_left .== 0] .= 10^-15
+#targetShifted_16_inh_left[targetShifted_16_inh_left .== 0] .= 10^-15
 
 #targetShifted_16_exc_right = targetShifted_16_exc_right[.!isinf.(targetShifted_16_exc_right)]
-targetShifted_16_exc_right[targetShifted_16_exc_right .== 0] .= 10^-15
+#targetShifted_16_exc_right[targetShifted_16_exc_right .== 0] .= 10^-15
 
 #targetShifted_16_inh_right = targetShifted_16_inh_right[.!isinf.(targetShifted_16_inh_right)]
-targetShifted_16_inh_right[targetShifted_16_inh_right .== 0] .= 10^-15
+#targetShifted_16_inh_right[targetShifted_16_inh_right .== 0] .= 10^-15
 
 
 figure(); hist(log10.(vec(targetShifted_16_exc_left)), bins=300, histtype="step")

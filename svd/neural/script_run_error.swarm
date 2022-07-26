@@ -1,0 +1,5 @@
+julia bnet.jl 9 3 1
+julia bnet.jl 9 3 2
+julia bnet.jl 9 3 3
+julia bnet.jl 9 3 4
+julia bnet.jl 9 3 5

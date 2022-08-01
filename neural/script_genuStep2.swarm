@@ -1,0 +1,4 @@
+julia main_genuStep2.jl 1
+julia main_genuStep2.jl 2
+julia main_genuStep2.jl 3
+julia main_genuStep2.jl 4

@@ -1,0 +1,5 @@
+julia main_pltscaling.jl 1
+julia main_pltscaling.jl 2
+julia main_pltscaling.jl 3
+julia main_pltscaling.jl 4
+julia main_pltscaling.jl 5
